@@ -1,8 +1,27 @@
 services:
   - type: web
     name: whatsapp-chatbot
-    env: java
+    env: docker
     plan: free
+    repo: https://github.com/YOUR_USERNAME/Project-1
     branch: main
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/Project-1-0.0.1-SNAPSHOT.jar
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - Dockerfile
+        - src/**
+        - pom.xml
+    envVars:
+      - key: FIREBASE_CREDENTIAL_PATH
+        value: /etc/secrets/firebase.json
+      - key: API_KEY
+        value: your_api_key_here
+      - key: WHATSAPP_TOKEN
+        value: your_whatsapp_token_here
+      - key: OTHER_ENV
+        value: something_optional
+
+  - type: secret
+    name: firebase-credentials
+    envVarKey: FIREBASE_CREDENTIAL_PATH
+    filePath: firebase.json
